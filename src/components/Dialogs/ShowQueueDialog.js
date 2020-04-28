@@ -38,7 +38,7 @@ class ShowQueueDialog extends React.Component {
 		const { open, arrayz, onRequestClose, currentNumber } = this.props;
 		const pastNum = arrayz.map((num) => {
 			if (num === currentNumber)
-				return <BorderedText key={num}>{num} = > </BorderedText>;
+				return <BorderedText key={num}>{num}</BorderedText>;
 			return <Text key={num}>{num} = > </Text>;
 		});
 		const action = [
