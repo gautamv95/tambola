@@ -6,6 +6,7 @@ import NewNumber from "./NewNumber/NewNumber";
 import { styled } from "@material-ui/core/styles";
 import ShowQueueDialog from "../Dialogs/ShowQueueDialog";
 import ResetDialog from "../Dialogs/ResetDialog";
+import Credentials from "../Credentials/Credentials";
 
 const Heading = styled(Typography)({
 	fontFamily: "Montserrat, sans-serif",
@@ -122,84 +123,89 @@ class NumberList extends Component {
 		});
 
 		return (
-			<div id="numberList">
-				<div className="numberList-left">
-					<div>
-						<Heading>Tambola</Heading>
+			<React.Fragment>
+				<div id="numberList">
+					<div className="numberList-left">
+						<div>
+							<Heading>Tambola</Heading>
+						</div>
+						<div>
+							<MarginButton
+								variant="contained"
+								color="secondary"
+								size="large"
+								disabled={
+									this.state.numbersQueue.length === 90
+										? true
+										: false
+								}
+								onClick={this.generateNewNumber}
+							>
+								Generate Next Number
+							</MarginButton>
+						</div>
+						<div id="numberList-left-divs">
+							<NewNumber
+								heading="Current Number"
+								currentNum={this.state.newNumber}
+							/>
+							<NewNumber
+								heading="Past Number"
+								currentNum={this.state.pastNumber}
+							/>
+						</div>
+						<div>
+							<MarginButton
+								variant="contained"
+								color="secondary"
+								size="small"
+								disabled={this.state.showQueueDialog}
+								onClick={() => {
+									this._showQueueDialog(true);
+								}}
+							>
+								Show Previous Numbers
+								{!!this.state.showQueueDialog && (
+									<ShowQueueDialog
+										open={this.state.showQueueDialog}
+										onRequestClose={() => {
+											this._showQueueDialog(false);
+										}}
+										arrayz={this.state.numbersQueue}
+										currentNumber={this.state.newNumber}
+									/>
+								)}
+							</MarginButton>
+						</div>
+						<div>
+							<MarginButton
+								variant="contained"
+								color="primary"
+								size="small"
+								disabled={this.state.showResetDialog}
+								onClick={() => {
+									this._showResetDialog(true);
+								}}
+							>
+								Reset
+								{!!this.state.showResetDialog && (
+									<ResetDialog
+										open={this.state.showResetDialog}
+										onReset={this.resetLocalStorage}
+										onRequestClose={() => {
+											this._showResetDialog(false);
+										}}
+									/>
+								)}
+							</MarginButton>
+						</div>
 					</div>
-					<div>
-						<MarginButton
-							variant="contained"
-							color="secondary"
-							size="large"
-							disabled={
-								this.state.numbersQueue.length === 90
-									? true
-									: false
-							}
-							onClick={this.generateNewNumber}
-						>
-							Generate Next Number
-						</MarginButton>
-					</div>
-					<div id="numberList-left-divs">
-						<NewNumber
-							heading="Current Number"
-							currentNum={this.state.newNumber}
-						/>
-						<NewNumber
-							heading="Past Number"
-							currentNum={this.state.pastNumber}
-						/>
-					</div>
-					<div>
-						<MarginButton
-							variant="contained"
-							color="secondary"
-							size="small"
-							disabled={this.state.showQueueDialog}
-							onClick={() => {
-								this._showQueueDialog(true);
-							}}
-						>
-							Show Previous Numbers
-							{!!this.state.showQueueDialog && (
-								<ShowQueueDialog
-									open={this.state.showQueueDialog}
-									onRequestClose={() => {
-										this._showQueueDialog(false);
-									}}
-									arrayz={this.state.numbersQueue}
-									currentNumber={this.state.newNumber}
-								/>
-							)}
-						</MarginButton>
-					</div>
-					<div>
-						<MarginButton
-							variant="contained"
-							color="primary"
-							size="small"
-							disabled={this.state.showResetDialog}
-							onClick={() => {
-								this._showResetDialog(true);
-							}}
-						>
-							Reset
-							{!!this.state.showResetDialog && (
-								<ResetDialog
-									open={this.state.showResetDialog}
-									onReset={this.resetLocalStorage}
-									onRequestClose={() => {
-										this._showResetDialog(false);
-									}}
-								/>
-							)}
-						</MarginButton>
-					</div>
+					<div>{list}</div>
 				</div>
-				<div>{list}</div>
-			</div>
+				<div id="credentials-div">
+					<Credentials />
+				</div>
+			</React.Fragment>
 		);
 	}
 }

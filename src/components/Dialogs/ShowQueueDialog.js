@@ -9,7 +9,7 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
-import { indigo } from "@material-ui/core/colors";
+import { blue, blueGrey } from "@material-ui/core/colors";
 import Slide from "@material-ui/core/Slide";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,12 +17,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 const Text = styled(Typography)({
 	margin: "0.4rem 0.4rem 0.4rem 0",
-	padding: "0.2rem",
+	padding: "0.3rem",
 	display: "inline-block",
 });
 const BorderedText = styled(Text)({
-	border: "3px solid black",
-	borderColor: indigo[900],
+	backgroundColor: blue[900],
+	color: blueGrey[100],
+	padding: "0.5rem",
+	borderRadius: "8px",
 });
 const QueueDialog = styled(Dialog)({
 	padding: "1rem",
@@ -40,7 +42,12 @@ class ShowQueueDialog extends React.Component {
 			return <Text key={num}>{num} = > </Text>;
 		});
 		const action = [
-			<Button variant="outlined" color="primary" onClick={onRequestClose}>
+			<Button
+				variant="outlined"
+				size="small"
+				color="primary"
+				onClick={onRequestClose}
+			>
 				Close
 			</Button>,
 		];

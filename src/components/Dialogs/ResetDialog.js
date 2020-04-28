@@ -9,15 +9,10 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
-import { cyan } from "@material-ui/core/colors";
 import Slide from "@material-ui/core/Slide";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
-});
-const Text = styled(Typography)({
-	margin: "0.5rem 0.5rem 0.5rem 0",
-	display: "inline-block",
 });
 const DialogWrapper = styled(Dialog)({
 	padding: "1rem",
@@ -31,7 +26,7 @@ class ResetDialog extends React.Component {
 		const { open, onReset, onRequestClose } = this.props;
 		const action = [
 			<Button
-				size="sm"
+				size="small"
 				variant="outlined"
 				color="primary"
 				onClick={onRequestClose}
@@ -39,7 +34,7 @@ class ResetDialog extends React.Component {
 				No
 			</Button>,
 			<Button
-				size="sm"
+				size="small"
 				variant="contained"
 				color="primary"
 				onClick={onReset}

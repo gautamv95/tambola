@@ -6,6 +6,11 @@
 	margin: 1rem;
 	margin-left: 2rem;
 }
+#credentials-div {
+	position: absolute;
+	bottom: 0;
+	left: 1px;
+}
 .numberList-left {
 	text-align: center;
 	display: flex;
