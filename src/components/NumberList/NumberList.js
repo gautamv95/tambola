@@ -5,11 +5,15 @@ import { Button, Typography } from "@material-ui/core";
 import NewNumber from "./NewNumber/NewNumber";
 import { styled } from "@material-ui/core/styles";
 import ShowQueueDialog from "../Dialogs/ShowQueueDialog";
-import { Client } from "whatsapp-web.js";
+import ResetDialog from "../Dialogs/ResetDialog";
 
 const Heading = styled(Typography)({
 	fontFamily: "Montserrat, sans-serif",
 	fontSize: "2.5rem",
+});
+
+const MarginButton = styled(Button)({
+	margin: "1rem 0 0",
 });
 
 class NumberList extends Component {
@@ -19,42 +23,72 @@ class NumberList extends Component {
 		numbers: [],
 		numbersQueue: [],
 		showQueueDialog: false,
+		showResetDialog: false,
+		isReset: true,
 	};
 
 	generateNewNumber = () => {
 		let newNumber = Math.floor(Math.random() * 90) + 1;
 		while (this.state.numbers[newNumber - 1] !== 0) {
-			newNumber = Math.floor(Math.random() * 89) + 1;
+			newNumber = Math.floor(Math.random() * 90) + 1;
 		}
 		const pastNumber = this.state.newNumber;
 		let numbers = [...this.state.numbers];
 		let numbersQueue = [...this.state.numbersQueue];
 		numbersQueue.push(newNumber);
 		numbers[newNumber - 1] = 1;
-		this.setState({ numbers, newNumber, numbersQueue, pastNumber });
+		this.setState({
+			isReset: true,
+			numbers,
+			newNumber,
+			numbersQueue,
+			pastNumber,
+		});
 	};
 
-	componentDidMount() {
+	componentDidMount = () => {
+		const isReset = JSON.parse(localStorage.getItem("isReset"));
 		this.populateArray();
-		const client = new Client();
+		if (isReset) this.getFromLocalStorage();
+	};
 
-		client.on("qr", (qr) => {
-			// Generate and scan this code with your phone
-			console.log("QR RECEIVED", qr);
+	componentDidUpdate = () => {
+		this.saveToLocalStorage();
+	};
+
+	getFromLocalStorage = () => {
+		const numbersQueue = JSON.parse(localStorage.getItem("numbersQueue"));
+		const numbers = JSON.parse(localStorage.getItem("numbers"));
+		const newNumber = JSON.parse(localStorage.getItem("newNumber"));
+		const pastNumber = JSON.parse(localStorage.getItem("pastNumber"));
+		this.setState({ numbersQueue, numbers, newNumber, pastNumber });
+	};
+
+	saveToLocalStorage = () => {
+		const {
+			isReset,
+			numbersQueue,
+			numbers,
+			newNumber,
+			pastNumber,
+		} = this.state;
+		localStorage.setItem("numbersQueue", JSON.stringify(numbersQueue));
+		localStorage.setItem("numbers", JSON.stringify(numbers));
+		localStorage.setItem("newNumber", JSON.stringify(newNumber));
+		localStorage.setItem("pastNumber", JSON.stringify(pastNumber));
+		localStorage.setItem("isReset", JSON.stringify(isReset));
+	};
+
+	resetLocalStorage = () => {
+		this.populateArray();
+		this.setState({
+			isReset: false,
+			newNumber: 0,
+			pastNumber: 0,
+			numbersQueue: [],
+			showResetDialog: false,
 		});
-
-		client.on("ready", () => {
-			console.log("Client is ready!");
-		});
-
-		client.on("message", (msg) => {
-			if (msg.body == "!ping") {
-				msg.reply("pong");
-			}
-		});
-
-		client.initialize();
-	}
+	};
 
 	populateArray = () => {
 		let numbers = [];
@@ -67,12 +101,24 @@ class NumberList extends Component {
 	};
 
 	_showQueueDialog = (value) => {
+		console.log(value);
 		this.setState({ showQueueDialog: value });
+	};
+
+	_showResetDialog = (value) => {
+		this.setState({ showResetDialog: value });
 	};
 
 	render() {
 		const list = this.state.numbers.map((num, index) => {
-			return <Numbers key={index + 1} number={index + 1} num={num} />;
+			return (
+				<Numbers
+					key={index + 1}
+					currentNum={this.state.newNumber}
+					number={index + 1}
+					num={num}
+				/>
+			);
 		});
 
 		return (
@@ -82,14 +128,19 @@ class NumberList extends Component {
 						<Heading>Tambola</Heading>
 					</div>
 					<div>
-						<Button
+						<MarginButton
 							variant="contained"
 							color="secondary"
 							size="large"
+							disabled={
+								this.state.numbersQueue.length === 90
+									? true
+									: false
+							}
 							onClick={this.generateNewNumber}
 						>
 							Generate Next Number
-						</Button>
+						</MarginButton>
 					</div>
 					<div id="numberList-left-divs">
 						<NewNumber
@@ -102,10 +153,11 @@ class NumberList extends Component {
 						/>
 					</div>
 					<div>
-						<Button
+						<MarginButton
 							variant="contained"
 							color="secondary"
-							size="large"
+							size="small"
+							disabled={this.state.showQueueDialog}
 							onClick={() => {
 								this._showQueueDialog(true);
 							}}
@@ -114,14 +166,36 @@ class NumberList extends Component {
 							{!!this.state.showQueueDialog && (
 								<ShowQueueDialog
 									open={this.state.showQueueDialog}
-									onClose={() => {
+									onRequestClose={() => {
 										this._showQueueDialog(false);
 									}}
 									arrayz={this.state.numbersQueue}
 									currentNumber={this.state.newNumber}
 								/>
 							)}
-						</Button>
+						</MarginButton>
+					</div>
+					<div>
+						<MarginButton
+							variant="contained"
+							color="primary"
+							size="small"
+							disabled={this.state.showResetDialog}
+							onClick={() => {
+								this._showResetDialog(true);
+							}}
+						>
+							Reset
+							{!!this.state.showResetDialog && (
+								<ResetDialog
+									open={this.state.showResetDialog}
+									onReset={this.resetLocalStorage}
+									onRequestClose={() => {
+										this._showResetDialog(false);
+									}}
+								/>
+							)}
+						</MarginButton>
 					</div>
 				</div>
 				<div>{list}</div>

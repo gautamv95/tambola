@@ -9,20 +9,20 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
-import { cyan } from "@material-ui/core/colors";
+import { indigo } from "@material-ui/core/colors";
 import Slide from "@material-ui/core/Slide";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 const Text = styled(Typography)({
-	margin: "0.5rem",
+	margin: "0.4rem 0.4rem 0.4rem 0",
+	padding: "0.2rem",
 	display: "inline-block",
 });
-const UnderlineText = styled(Text)({
-	textDecoration: "underline overline",
-	textDecorationStyle: "dashed",
-	textDecorationColor: cyan[900],
+const BorderedText = styled(Text)({
+	border: "3px solid black",
+	borderColor: indigo[900],
 });
 const QueueDialog = styled(Dialog)({
 	padding: "1rem",
@@ -33,9 +33,14 @@ const QueueDialogActions = styled(DialogActions)({
 
 class ShowQueueDialog extends React.Component {
 	render() {
-		const { open, arrayz, onClose, currentNumber } = this.props;
+		const { open, arrayz, onRequestClose, currentNumber } = this.props;
+		const pastNum = arrayz.map((num) => {
+			if (num === currentNumber)
+				return <BorderedText key={num}>{num} = > </BorderedText>;
+			return <Text key={num}>{num} = > </Text>;
+		});
 		const action = [
-			<Button variant="outlined" color="primary" onClick={onClose}>
+			<Button variant="outlined" color="primary" onClick={onRequestClose}>
 				Close
 			</Button>,
 		];
@@ -45,21 +50,17 @@ class ShowQueueDialog extends React.Component {
 					maxWidth="xl"
 					TransitionComponent={Transition}
 					open={open}
-					onClose={onClose}
-					onBackdropClick={onClose}
+					onClose={onRequestClose}
+					onBackdropClick={onRequestClose}
 				>
 					<DialogTitle>Previous Numbers</DialogTitle>
 					<DialogContent>
 						<DialogContentText>
-							{arrayz.map((num) => {
-								if (num === currentNumber)
-									return (
-										<UnderlineText key={num}>
-											{num} = >{" "}
-										</UnderlineText>
-									);
-								return <Text key={num}>{num} = > </Text>;
-							})}
+							{arrayz.length ? (
+								pastNum
+							) : (
+								<Text>Boomer Nothing to show here!</Text>
+							)}
 						</DialogContentText>
 					</DialogContent>
 					<QueueDialogActions>{action}</QueueDialogActions>
