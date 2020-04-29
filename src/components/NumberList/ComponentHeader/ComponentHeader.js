@@ -17,7 +17,7 @@ const Heading = styled(Typography)({
 	margin: "2rem auto 0",
 	fontFamily: "Montserrat, sans-serif",
 });
-class NewNumber extends Component {
+class ComponentHeader extends Component {
 	render() {
 		return (
 			<React.Fragment>
@@ -30,4 +30,4 @@ class NewNumber extends Component {
 	}
 }
 
-export default NewNumber;
+export default ComponentHeader;

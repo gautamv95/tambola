@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Numbers from "./Numbers/Numbers";
 import "./NumberList.css";
 import { Button, Typography } from "@material-ui/core";
-import NewNumber from "./NewNumber/NewNumber";
+import ComponentHeader from "./ComponentHeader/ComponentHeader";
 import { styled } from "@material-ui/core/styles";
 import ShowQueueDialog from "../Dialogs/ShowQueueDialog";
 import ResetDialog from "../Dialogs/ResetDialog";
@@ -145,11 +145,11 @@ class NumberList extends Component {
 							</MarginButton>
 						</div>
 						<div id="numberList-left-divs">
-							<NewNumber
+							<ComponentHeader
 								heading="Current Number"
 								currentNum={this.state.newNumber}
 							/>
-							<NewNumber
+							<ComponentHeader
 								heading="Past Number"
 								currentNum={this.state.pastNumber}
 							/>
