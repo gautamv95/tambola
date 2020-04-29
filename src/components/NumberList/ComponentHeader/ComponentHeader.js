@@ -12,6 +12,7 @@ const Text = styled(Typography)({
 	fontFamily: "Nunito Sans, sans-serif",
 	fontSize: "1.5rem",
 });
+
 const Heading = styled(Typography)({
 	fontSize: "1.5rem",
 	margin: "2rem auto 0",

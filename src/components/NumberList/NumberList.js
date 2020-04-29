@@ -26,6 +26,7 @@ class NumberList extends Component {
 		showQueueDialog: false,
 		showResetDialog: false,
 		isReset: true,
+		timePassedSinceLastNumber: 0,
 	};
 
 	generateNewNumber = () => {
@@ -45,6 +46,7 @@ class NumberList extends Component {
 			numbersQueue,
 			pastNumber,
 		});
+		this.startTimer(9);
 	};
 
 	componentDidMount = () => {
@@ -101,6 +103,16 @@ class NumberList extends Component {
 		this.setState({ numbers });
 	};
 
+	startTimer = (max) => {
+		this.setState({ timePassedSinceLastNumber: max });
+		let i = 0;
+		let z = setInterval(() => {
+			if (i === max - 1) clearInterval(z);
+			i++;
+			this.setState({ timePassedSinceLastNumber: max - i });
+		}, 1000);
+	};
+
 	_showQueueDialog = (value) => {
 		console.log(value);
 		this.setState({ showQueueDialog: value });
@@ -135,7 +147,8 @@ class NumberList extends Component {
 								color="secondary"
 								size="large"
 								disabled={
-									this.state.numbersQueue.length === 90
+									this.state.numbersQueue.length === 90 ||
+									this.state.timePassedSinceLastNumber
 										? true
 										: false
 								}
@@ -152,6 +165,12 @@ class NumberList extends Component {
 							<ComponentHeader
 								heading="Past Number"
 								currentNum={this.state.pastNumber}
+							/>
+							<ComponentHeader
+								heading="Time to Wait"
+								currentNum={
+									this.state.timePassedSinceLastNumber
+								}
 							/>
 						</div>
 						<div>

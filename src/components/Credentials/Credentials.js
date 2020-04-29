@@ -1,10 +1,10 @@
 import React from "react";
 import { styled } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { blue, blueGrey } from "@material-ui/core/colors";
+import { cyan, blueGrey } from "@material-ui/core/colors";
 
 const Text = styled(Typography)({
-	backgroundColor: blue[700],
+	backgroundColor: cyan[900],
 	padding: "1rem",
 	fontFamily: "Montserrat, sans-serif",
 	margin: "1rem auto",
