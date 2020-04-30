@@ -46,7 +46,7 @@ class NumberList extends Component {
 			numbersQueue,
 			pastNumber,
 		});
-		if (numbersQueue.length <= 89) this.startTimer(9);
+		if (numbersQueue.length <= 89) this.startTimer(10);
 	};
 
 	componentDidMount = () => {
