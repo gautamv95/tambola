@@ -26,7 +26,7 @@ class NumberList extends Component {
 		showQueueDialog: false,
 		showResetDialog: false,
 		isReset: true,
-		timePassedSinceLastNumber: 0,
+		waitingTimeForNextNumber: 0,
 	};
 
 	generateNewNumber = () => {
@@ -46,13 +46,20 @@ class NumberList extends Component {
 			numbersQueue,
 			pastNumber,
 		});
-		this.startTimer(9);
+		if (numbersQueue.length <= 89) this.startTimer(9);
 	};
 
 	componentDidMount = () => {
 		const isReset = JSON.parse(localStorage.getItem("isReset"));
 		this.populateArray();
-		if (isReset) this.getFromLocalStorage();
+		if (isReset) {
+			this.getFromLocalStorage();
+			const waitingTimeForNextNumber = JSON.parse(
+				localStorage.getItem("waitingTimeForNextNumber")
+			);
+			if (waitingTimeForNextNumber > 0)
+				this.startTimer(waitingTimeForNextNumber);
+		}
 	};
 
 	componentDidUpdate = () => {
@@ -74,12 +81,17 @@ class NumberList extends Component {
 			numbers,
 			newNumber,
 			pastNumber,
+			waitingTimeForNextNumber,
 		} = this.state;
 		localStorage.setItem("numbersQueue", JSON.stringify(numbersQueue));
 		localStorage.setItem("numbers", JSON.stringify(numbers));
 		localStorage.setItem("newNumber", JSON.stringify(newNumber));
 		localStorage.setItem("pastNumber", JSON.stringify(pastNumber));
 		localStorage.setItem("isReset", JSON.stringify(isReset));
+		localStorage.setItem(
+			"waitingTimeForNextNumber",
+			JSON.stringify(waitingTimeForNextNumber)
+		);
 	};
 
 	resetLocalStorage = () => {
@@ -104,12 +116,12 @@ class NumberList extends Component {
 	};
 
 	startTimer = (max) => {
-		this.setState({ timePassedSinceLastNumber: max });
+		this.setState({ waitingTimeForNextNumber: max });
 		let i = 0;
 		let z = setInterval(() => {
 			if (i === max - 1) clearInterval(z);
 			i++;
-			this.setState({ timePassedSinceLastNumber: max - i });
+			this.setState({ waitingTimeForNextNumber: max - i });
 		}, 1000);
 	};
 
@@ -148,7 +160,7 @@ class NumberList extends Component {
 								size="large"
 								disabled={
 									this.state.numbersQueue.length === 90 ||
-									this.state.timePassedSinceLastNumber
+									this.state.waitingTimeForNextNumber
 										? true
 										: false
 								}
@@ -168,9 +180,7 @@ class NumberList extends Component {
 							/>
 							<ComponentHeader
 								heading="Time to Wait"
-								currentNum={
-									this.state.timePassedSinceLastNumber
-								}
+								currentNum={this.state.waitingTimeForNextNumber}
 							/>
 						</div>
 						<div>
