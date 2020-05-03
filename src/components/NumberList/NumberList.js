@@ -27,6 +27,7 @@ class NumberList extends Component {
 		showResetDialog: false,
 		isReset: true,
 		waitingTimeForNextNumber: 0,
+		hasClipboardAccess: true,
 	};
 
 	generateNewNumber = () => {
@@ -46,12 +47,16 @@ class NumberList extends Component {
 			numbersQueue,
 			pastNumber,
 		});
-		this.copyToClipboard(newNumber);
+		if (this.state.hasClipboardAccess) this.copyToClipboard(newNumber);
 		if (numbersQueue.length <= 89) this.startTimer(10);
 	};
 
 	copyToClipboard = (number) => {
-		navigator.clipboard.writeText(number);
+		try {
+			navigator.clipboard.writeText(number);
+		} catch (err) {
+			this.setState({ hasClipboardAccess: false });
+		}
 	};
 
 	componentDidMount = () => {
@@ -131,7 +136,6 @@ class NumberList extends Component {
 	};
 
 	_showQueueDialog = (value) => {
-		console.log(value);
 		this.setState({ showQueueDialog: value });
 	};
 
