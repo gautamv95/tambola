@@ -46,7 +46,12 @@ class NumberList extends Component {
 			numbersQueue,
 			pastNumber,
 		});
+		this.copyToClipboard(newNumber);
 		if (numbersQueue.length <= 89) this.startTimer(10);
+	};
+
+	copyToClipboard = (number) => {
+		navigator.clipboard.writeText(number);
 	};
 
 	componentDidMount = () => {
