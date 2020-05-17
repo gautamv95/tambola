@@ -7,6 +7,7 @@ import { styled } from "@material-ui/core/styles";
 import ShowQueueDialog from "../Dialogs/ShowQueueDialog";
 import ResetDialog from "../Dialogs/ResetDialog";
 import Credentials from "../Credentials/Credentials";
+import Sidebar from "../Layout/Sidebar/Sidebar";
 
 const Heading = styled(Typography)({
 	fontFamily: "Montserrat, sans-serif",
@@ -157,6 +158,7 @@ class NumberList extends Component {
 
 		return (
 			<React.Fragment>
+				<Sidebar />
 				<div id="numberList">
 					<div className="numberList-left">
 						<div>
