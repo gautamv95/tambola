@@ -4,7 +4,16 @@ import { Header } from "./styles";
 import UserCards from "./UserCards/UserCards";
 
 class Users extends Component {
-	state = {};
+	state = {
+		users: [
+			{ name: "Gautam", tickets: [1, 2, 3] },
+			{ name: "Gautam", tickets: [1, 2, 3] },
+			{ name: "Gautam", tickets: [1, 2, 3] },
+			{ name: "Gautam", tickets: [1, 2, 3] },
+			{ name: "Gautam", tickets: [1, 2, 3] },
+			{ name: "Gautam", tickets: [1, 2, 3] },
+		],
+	};
 
 	render() {
 		const cards = this.state.users.map((user, index) => {
@@ -22,7 +31,7 @@ class Users extends Component {
 						<Header align="center" variant="h4">
 							Players
 						</Header>
-						<Grid container spacing={3} justify="space-around">
+						<Grid container spacing={3}>
 							{cards}
 						</Grid>
 					</Grid>
